@@ -4,29 +4,31 @@
     Use Date type for "late return" feature
     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/now
 */
-const prompt = require('prompt-sync')();
 
-const AUTHORPOOL = [
-    "Yasu Ekundayo", "Uzoma Karuna", "Shams Andie", "Baako Jip",
-    "Qing Gerry", "Lebohang Nitya", "Ulloriaq Balwinder"
-];
+const GENERATOR = {
+    "authorPool": ["Yasu Ekundayo", "Uzoma Karuna", "Shams Andie", "Baako Jip",
+        "Qing Gerry", "Lebohang Nitya", "Ulloriaq Balwinder"],
 
-const BOOKTITLEPOOL = [
-    "Slave Of The East", "Rebel Of The Mountain", "Horses Of Perfection",
-    "Aliens Of Fire", "Children And Warriors", "Robots And Doctors",
-    "Intention With A Goal", "Luck Without A Conscience",
-    "Forsaken By The West", "Visiting The West"
-];
+    "bookTitlePool": ["Slave Of The East", "Rebel Of The Mountain", "Horses Of Perfection",
+        "Aliens Of Fire", "Children And Warriors", "Robots And Doctors",
+        "Intention With A Goal", "Luck Without A Conscience",
+        "Forsaken By The West", "Visiting The West"]
+};
+
+const JSON_BIN_ROOT = "https://api.jsonbin.io/v3"
+const JSON_BIN_ID = "66a22c98ad19ca34f88c95a7";
+const JSON_BIN_BIN = JSON_BIN_ROOT + /b/ + JSON_BIN_ID;
 
 let books = [];
+let uidCount = -1;
+let isValid = false; // if initial load is successful
 
 function Book(title, author, isbn) {
     return {
-               "title" : title,
-              "author" : author,
-                "isbn" : isbn,
-        "isCheckedOut" : false,
-        "checkOutTime" : new Date()
+        "uid": ++uidCount,
+        "title": title,
+        "author": author,
+        "isbn": isbn,
     };
 }
 
@@ -119,30 +121,30 @@ function validateIsbn(isbn) {
 function getRandomIsbn(is13Long = false) {
     const BREAKSYMBOL = '-';
     let newIsbn = "";
-    let randNum = 
-            String(Math.floor(Math.random() * 10 ** 9)).padStart(9, '0');
+    let randNum =
+        String(Math.floor(Math.random() * 10 ** 9)).padStart(9, '0');
 
     if (is13Long) {
         const FIXEDTHREE = "978";
-              
+
         newIsbn = FIXEDTHREE + randNum;
-        
+
         console.log(newIsbn);
 
-        let  sum = 0;
+        let sum = 0;
         for (let i = 0; i < newIsbn.length; ++i) {
             sum += parseInt(newIsbn[i]) * ((i % 2 == 0) ? 1 : 3);
         }
-        
+
         newIsbn += String(10 - (sum % 10));
     }
-    else  {
+    else {
 
         console.log(randNum);
 
         let sum = 0;
         for (let start = 0; randNum.length < start; ++start) {
-                sum += parseInt(randNump[start]) * (10 - start);
+            sum += parseInt(randNump[start]) * (10 - start);
         }
 
         let checkValue = sum % 11;
@@ -152,18 +154,11 @@ function getRandomIsbn(is13Long = false) {
 }
 
 function validateBook(book) {
-    return(validateIsbn(book.isbn));
-}
-
-function isUniqueBook(books, book) {
-    for(let _book in books) 
-        if(book.isbn == _book.isbn) return false;
-    
-    return true;
+    return (validateIsbn(book.isbn));
 }
 
 function addBook(books, book) {
-    if (validateBook(book) && isUniqueBook(books, book)) {
+    if (validateBook(book)) {
         books.push(book);
         console.log(`New Book ${book.title} added`);
         return true;
@@ -185,8 +180,10 @@ function addBookCustom(books, title, author, isbn) {
 
 function addRandomBook(books) {
     addBookCustom(books,
-        BOOKTITLEPOOL[Math.floor(Math.random() * BOOKTITLEPOOL.length)],
-        AUTHORPOOL[Math.floor(Math.random() * AUTHORPOOL.length)],
+        GENERATOR.bookTitlePool[Math.floor(Math.random()
+             * GENERATOR.bookTitlePool.length)],
+        GENERATOR.authorPool[Math.floor(Math.random()
+             * GENERATOR.authorPool.length)],
         getRandomIsbn()
     );
 }
@@ -202,38 +199,14 @@ function returnBook(books, isbn) {
     console.log(`No book with ISBN: ${isbn} was loaned out!`);
 }
 
-function checkOutBook(books, isbn) {
-    for (let book of books) {
-        if (book.isbn === isbn && !book.isCheckedOut) {
-            book.isCheckedOut = true;
-            console.log(`Book \"${book.title}\" successfully checked out!`);
-            return;
-        }
-    }
-    console.log(`Book with ISBN No.: ${isbn} cannot be found!`);
-}
-
-function showAllBook(books) {
-    let count = 0;
-    for (let book of books) {
-        console.log(
-                `(${count++}) ${book.title}\n`,
-                `By ${book.author}\n`,
-                `ISBN ${book.isbn}\n`,
-                `On loan: ${book.isCheckedOut}\n`
-        );
-    }
-    console.log("Cateloge Display Complete!");
-}
-
 function addNewBook(books, getRandomIsbn = false) {
     let title = prompt("Enter book title: ");
     let author = prompt("Enter book author: ");
     let isbn = prompt("Enter book ISBN: ");
 
-    if(getRandomIsbn) isbn = getRandomIsbn();
+    if (getRandomIsbn) isbn = getRandomIsbn();
 
-    let newbook  =  {
+    let newbook = {
         title: title,
         author: author,
         isbn: isbn,
@@ -244,74 +217,40 @@ function addNewBook(books, getRandomIsbn = false) {
     addBook(books, newbook);
 }
 
-function checkOutBook(books, isbn) {
-    for(let book of books) {
-        if(book.isbn == isbn) {
-            book.isCheckedOut = true;
-            console.log(`Book \"${book.title}\" checkedout successfully!`);
-            return;
-        }
+async function loadData() {
+    let result = false;
+
+    await axios.get(JSON_BIN_BIN + "/latest")
+        .then(function (response) {
+            uidCount = parseInt(response.record.uidCount);
+            books = response.record.books;
+            result = true;
+        })
+        .catch(function (err) {
+        });
+    return result;
+}
+
+async function saveToJsonBin() {
+    if(!isValid) {
+        console.log("User tried to save while having err data set!");
+        return false; // initial data pull failed.
     }
-    console.log(`Book with ISBN: ${isbn}, could not be found!`);
+    let result = false;
+    let json = {
+        "uidCount": uidCount,
+        "books": books
+    };
+
+    await axios.put(JSON_BIN_BIN, json.toString())
+        .then(function (reponse) {
+            result = true;
+        })
+        .catch(function (err) {
+        });
+
+    return result;
 }
-
-function returnBook(books, isbn) {
-    for(let book of books) {
-        if(book.isbn == isbn) {
-            book.isCheckedOut = false;
-            console.log(`Book \"${book.title}\" returned successfully!`);
-            return;
-        }
-    }
-    console.log(`Book with ISBN: ${isbn}, could not be found!`);
-}
-
-function showMenu() {
-    console.log('===== Menu =====');
-    console.log('1 - Show All Books');
-    console.log('2 - Add a new Book');
-    console.log('3 - Check out a Book');
-    console.log('4 - Return Book');
-    console.log('5 - Exit ');
-}
-
-function getUserInput() {
-    return prompt("Please enter an operation number: ");
-}
-
-function App() {
-    let running = true;
-    while (running) {
-        showMenu();
-        const input = getUserInput();
-        switch (input) {
-            case '1':
-                //Show All Books
-                showAllBook(books);
-                break;
-            case '2':
-                //Add new Book
-                addNewBook(books);
-                break;
-            case '3':
-                //Check out a Book
-                checkOutBook(books);
-                break;
-            case '4':
-                //Return Book
-                returnBook(books, isbn);
-                break;
-            case '5':
-                //Exit
-                running = false;
-                break;
-            default:
-                console.log("Invalid option!");
-
-        }
-    }
-}
-
 //App();
 
 //console.log(validateIsbn("978-1-408-85565-2"));
@@ -329,5 +268,3 @@ function App() {
 // console.log(test);
 
 //console.log(new Book("Hello World", "Blue Banana", "1234567890"));
-
-console.log("hello world");
