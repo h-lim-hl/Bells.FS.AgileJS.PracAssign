@@ -41,6 +41,7 @@
                 <div class="navbar-nav">
                     <a id="search-nav" class="nav-link" href="#">Search</a>
                     <a id="add-nav" class="nav-link" href="#">Add</a>
+                    <a id="save-nav" class="nav-link" href="#">Save</a>
                 </div>
             </div>
         </div>
@@ -105,8 +106,8 @@
                 <div class="row my-1">
                     <div class="col-9">
                         <div class="input-group">
-                            <span class="input-group-text" id="add-author-field">Author:</span>
-                            <input type="text" class="form-control" placeholder="Book Author" aria-label="Book Author"
+                            <span class="input-group-text">Author:</span>
+                            <input type="text" id="add-author-field" class="form-control" placeholder="Book Author" aria-label="Book Author"
                                 aria-describedby="add-author-field">
                         </div>
                     </div>
@@ -117,9 +118,9 @@
                 <div class="row my-1">
                     <div class="col-9">
                         <div class="input-group">
-                            <span class="input-group-text" id="add-isbn-field">ISBN:</span>
-                            <input type="text" class="form-control" placeholder="Book ISBN" aria-label="Book ISBN"
-                                aria-describedby="add-isbn-field">
+                            <span class="input-group-text">ISBN:</span>
+                            <input type="text" id="add-isbn-field" class="form-control" placeholder="Book ISBN"
+                                aria-label="Book ISBN" aria-describedby="add-isbn-field">
                         </div>
                     </div>
                     <div class="col-3">
@@ -133,49 +134,8 @@
     <div class="container">
         <h5 class="mt-3">Log</h5>
         <div class="row">
-            <div class="col-12 overflow-scroll"
+            <div id="console-out" class="col-12 overflow-scroll"
                 style="border:1px solid black; background-color:lightgrey; border-radius:5px; height:70px">
-                <p id="console-out">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                    ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-                    voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-                    Pariatur alias eum, placeat at dolores magnam pariatur magni maxime adipisci perspiciatis eveniet.
-                    Deserunt nam quod corporis hic aspernatur eum ad cum, quae reiciendis consequatur sit, et molestiae
-                    voluptas magnam, praesentium nesciunt in. Maiores sunt qui error deleniti mollitia, animi expedita
-                    harum esse eius, deserunt quod porro, iusto vel eligendi omnis officia maxime quas amet rem ducimus
-                    nesciunt laboriosam, et nesciunt quisquam soluta exercitationem tempora tenetur adipisci. Earum ad
-                    esse beatae perspiciatis voluptas, harum consequuntur similique laboriosam sapiente aliquid autem,
-                    culpa natus nobis quam ipsa quia quisquam molestiae quibusdam enim, eveniet dolorem doloremque quos
-                    veniam quaerat corporis non beatae ut exercitationem?
-
-                    Unde vel reprehenderit et, repudiandae voluptatem ad iste nulla, quibusdam dignissimos sunt
-                    praesentium illum laborum est quidem doloremque modi laudantium, quam architecto molestiae nobis
-                    doloribus soluta perspiciatis odio at obcaecati consectetur, numquam sequi ratione?
-
-                    Impedit architecto corrupti corporis est nesciunt ullam, sequi provident ipsum rem doloribus
-                    incidunt repellat veritatis officiis, id enim porro rem sequi culpa expedita, totam sapiente enim
-                    culpa beatae itaque deserunt harum? Ipsum amet fugit et, distinctio commodi incidunt pariatur,
-                    eligendi cumque natus ipsum saepe nesciunt cupiditate. Distinctio vel ipsum omnis, officia assumenda
-                    esse perferendis consequatur, earum possimus consequuntur sunt tempore repellat, distinctio esse
-                    ducimus magni deserunt accusamus? Quae hic natus ipsam amet ex earum exercitationem accusantium
-                    tempore iste, animi quaerat labore nesciunt maiores minus dignissimos repellendus numquam corrupti,
-                    placeat illum dolor sit nulla accusamus laboriosam rerum, libero dolor odit architecto totam
-                    molestias suscipit quia voluptatem expedita nihil dignissimos, accusantium omnis exercitationem
-                    veniam non natus odit eaque architecto explicabo.
-
-                    Laudantium ipsam quam accusamus quaerat perferendis mollitia nulla optio ipsum vitae eius, eligendi
-                    quo porro veniam non sed nesciunt modi, minus expedita perspiciatis ducimus distinctio qui ex illo
-                    deserunt eos, aliquid libero facilis architecto sint quae? Saepe soluta voluptatibus, quae amet sit
-                    voluptatibus ipsam quod dolores dolorem aspernatur repellat quos, atque ad quo reprehenderit ullam
-                    laboriosam facilis possimus perferendis voluptatem animi eius. Modi adipisci deserunt dicta ullam
-                    soluta provident est ratione quisquam, quos quis magnam possimus, exercitationem repudiandae nihil
-                    nobis inventore rem molestias modi dolores dolorum ducimus, pariatur animi dolor nobis possimus at
-                    optio, quos exercitationem suscipit dolore nulla dolorum nemo molestiae quod facere architecto.
-                    Cumque consequuntur itaque doloribus quidem tempora accusantium earum nemo reprehenderit incidunt
-                    obcaecati, similique reiciendis ratione accusantium totam eaque reprehenderit alias ea odit unde,
-                    accusamus ea earum ab ratione dolorum iure corporis.</p>
             </div>
             <button class="offset-4 col-4 btn btn-secondary mt-1" id="log-clear-btn"><Label>Clear Log</Label></button>
         </div>
@@ -187,7 +147,7 @@
         <div id="row listing-loader">
             <div id="loader-div" class="offset-5 col-2 my-5 loader"></div>
         </div>
-        <div id="listing-div">
+        <div id="listing-div" class="d-none">
             <div class="column" id="book-listing">
                 <ol class="list-group list-group-numbered">
                     <li class="list-group-item ms-2">Hello World By New Programmer
@@ -213,6 +173,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.js"
+        integrity="sha512-vHNHepeQWwAggJlhEk932jRS5sNdn/Nn4F+w4TpXW5dA+04qnd3e7YpfXo6auWhFG6z3FVhmScG4ovtF+qYeZw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="js/LibManSys.js"></script>
     <script src="js/index.js"></script>
 </body>
