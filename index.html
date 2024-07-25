@@ -27,9 +27,10 @@
             <h1>Fictitious Library Management System</h1>
         </div>
     </div>
+    <!-- Nav -->
     <nav class="navbar navbar-expand-sm bg-body-tertiary" name="home">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">
+            <a id="home-nav" class="navbar-brand" href="#">
                 <img src="img/library.svg" alt="FLMS Icon" style="height:30px;width:30px;">
                 FLMS</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -190,15 +191,15 @@
             <div class="column" id="book-listing">
                 <ol class="list-group list-group-numbered">
                     <li class="list-group-item ms-2">Hello World By New Programmer
-                        <button id="delete-btn" class="btn btn-danger"
+                        <button id="delete-btn" class="btn btn-danger" data-uid="1"
                             style="float:right"><label>Delete</label></button>
-                        <button id="edit-btn" class="btn btn-secondary mx-1"
+                        <button id="edit-btn" class="btn btn-secondary mx-1" data-uid="1"
                             style="float:right"><label>Edit</label></button>
                     </li>
                     <li class="list-group-item ms-2">Hello World By New Programmer
-                        <button id="delete-btn" class="btn btn-danger"
+                        <button id="delete-btn" class="btn btn-danger" data-uid="2"
                             style="float:right"><label>Delete</label></button>
-                        <button id="edit-btn" class="btn btn-secondary mx-1"
+                        <button id="edit-btn" class="btn btn-secondary mx-1" data-uid="2"
                             style="float:right"><label>Edit</label></button>
                     </li>
                 </ol>
