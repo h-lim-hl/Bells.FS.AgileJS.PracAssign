@@ -39,7 +39,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a id="search-nav" class="nav-link" href="#">Search</a>
+                    <a id="search-nav" class="nav-link disabled" aria-disabled="true"  href="#">Search</a>
                     <a id="add-nav" class="nav-link" href="#">Add</a>
                     <a id="save-nav" class="nav-link" href="#">Save</a>
                 </div>
@@ -47,6 +47,7 @@
         </div>
     </nav>
     <hr>
+
     <!-- Search Book -->
     <div id="search-div" class="container d-none"><!-- <div class="container d-none"> -->
         <div class="container">
@@ -55,30 +56,65 @@
                 <div class="row">
                     <div class="col-9">
                         <div class="input-group">
-                            <span class="input-group-text" id="search-title-field">Title:</span>
-                            <input type="text" class="form-control" placeholder="Book Title" aria-label="Book Title"
-                                aria-describedby="search-title-field">
+                            <span class="input-group-text">Query:</span>
+                            <input type="text" id="search-field" class="form-control" placeholder="Search Query" aria-label="Search Query"
+                                aria-describedby="search-field">
                         </div>
                     </div>
                     <div class="col-3">
                         <button class="col btn btn-primary" id="search-btn"><Label>Search</Label></button>
                     </div>
                 </div>
+                <div> <!-- !!!!!!!!!!!!!! -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                        <label class="form-check-label" for="flexRadioDefault1">
+                          Default radio
+                        </label>
+                      </div>
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                        <label class="form-check-label" for="flexRadioDefault2">
+                          Default checked radio
+                        </label>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Book Menu -->
+    <div id="edit-div" class="container d-none">
+        <div class="container">
+            <h5>Edit Book Menu</h5>
+            <div class="column">
+                <div class="row">
+                    <div class="col-9">
+                        <div class="input-group">
+                            <span class="input-group-text">Title:</span>
+                            <input type="text" id="edit-title-field" class="form-control" placeholder="Book Title"
+                                aria-label="Book Title" aria-describedby="edit-title-field">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <button class="col btn btn-primary" id="edit-btn"><Label>Update</Label></button>
+                    </div>
+                </div>
                 <div class="row my-1">
                     <div class="col-9">
                         <div class="input-group">
-                            <span class="input-group-text" id="search-author-field">Author:</span>
-                            <input type="text" class="form-control" placeholder="Book Author" aria-label="Book Author"
-                                aria-describedby="search-author-field">
+                            <span class="input-group-text">Author:</span>
+                            <input type="text" id="edit-author-field" class="form-control" placeholder="Book Author"
+                                aria-label="Book Author" aria-describedby="edit-author-field">
                         </div>
                     </div>
                 </div>
                 <div class="row my-1">
                     <div class="col-9">
                         <div class="input-group">
-                            <span class="input-group-text" id="search-isbn-field">ISBN:</span>
-                            <input type="text" class="form-control" placeholder="Book ISBN" aria-label="Book ISBN"
-                                aria-describedby="search-isbn-field">
+                            <span class="input-group-text">ISBN:</span>
+                            <input type="text" id="edit-isbn-field" class="form-control" placeholder="Book ISBN"
+                                aria-label="Book ISBN" aria-describedby="edit-isbn-field">
                         </div>
                     </div>
                 </div>
@@ -95,8 +131,8 @@
                     <div class="col-9">
                         <div class="input-group">
                             <span class="input-group-text">Title:</span>
-                            <input type="text" id="add-title-field" class="form-control" placeholder="Book Title" aria-label="Book Title"
-                                aria-describedby="add-title-field">
+                            <input type="text" id="add-title-field" class="form-control" placeholder="Book Title"
+                                aria-label="Book Title" aria-describedby="add-title-field">
                         </div>
                     </div>
                     <div class="col-3">
@@ -107,8 +143,8 @@
                     <div class="col-9">
                         <div class="input-group">
                             <span class="input-group-text">Author:</span>
-                            <input type="text" id="add-author-field" class="form-control" placeholder="Book Author" aria-label="Book Author"
-                                aria-describedby="add-author-field">
+                            <input type="text" id="add-author-field" class="form-control" placeholder="Book Author"
+                                aria-label="Book Author" aria-describedby="add-author-field">
                         </div>
                     </div>
                     <div class="col-3">
@@ -150,20 +186,20 @@
         <!-- <div id="listing-div" class="d-none"> -->
         <div id="listing-div" class="d-block">
             <!-- <div class="column"> -->
-                <!-- <ol class="list-group list-group-numbered"> -->
-                    <!-- <li class="list-group-item ms-2">Hello World By New Programmer -->
-                        <!-- <button id="delete-btn" class="btn btn-danger" data-uid="1" -->
-                            <!-- style="float:right"><label>Delete</label></button> -->
-                        <!-- <button id="edit-btn" class="btn btn-secondary mx-1" data-uid="1" -->
-                            <!-- style="float:right"><label>Edit</label></button> -->
-                    <!-- </li> -->
-                    <!-- <li class="list-group-item ms-2">Hello World By New Programmer -->
-                        <!-- <button id="delete-btn" class="btn btn-danger" data-uid="2" -->
-                            <!-- style="float:right"><label>Delete</label></button> -->
-                        <!-- <button id="edit-btn" class="btn btn-secondary mx-1" data-uid="2" -->
-                            <!-- style="float:right"><label>Edit</label></button> -->
-                    <!-- </li> -->
-                <!-- </ol> -->
+            <!-- <ol class="list-group list-group-numbered"> -->
+            <!-- <li class="list-group-item ms-2">Hello World By New Programmer -->
+            <!-- <button id="delete-btn" class="btn btn-danger" data-uid="1" -->
+            <!-- style="float:right"><label>Delete</label></button> -->
+            <!-- <button id="edit-btn" class="btn btn-secondary mx-1" data-uid="1" -->
+            <!-- style="float:right"><label>Edit</label></button> -->
+            <!-- </li> -->
+            <!-- <li class="list-group-item ms-2">Hello World By New Programmer -->
+            <!-- <button id="delete-btn" class="btn btn-danger" data-uid="2" -->
+            <!-- style="float:right"><label>Delete</label></button> -->
+            <!-- <button id="edit-btn" class="btn btn-secondary mx-1" data-uid="2" -->
+            <!-- style="float:right"><label>Edit</label></button> -->
+            <!-- </li> -->
+            <!-- </ol> -->
             <!-- </div> -->
         </div>
     </div>

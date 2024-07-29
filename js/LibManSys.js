@@ -41,7 +41,7 @@ function Book(title, author, isbn) {
 function extractIsbnSymbols(str) {
     const regex = /(\d|[xX]+)/g;
     let capture = str.match(regex);
-    return (capture == null || capture.length < 1 ) ? "" : capture.join('');
+    return (capture == null || capture.length < 1) ? "" : capture.join('');
 }
 
 function sumIsbn10Num(isbn, start = 0, end = -1) {
@@ -181,22 +181,11 @@ function addBookCustom(books, title, author, isbn) {
 function addRandomBook(books) {
     addBookCustom(books,
         GENERATOR.bookTitlePool[Math.floor(Math.random()
-             * GENERATOR.bookTitlePool.length)],
+            * GENERATOR.bookTitlePool.length)],
         GENERATOR.authorPool[Math.floor(Math.random()
-             * GENERATOR.authorPool.length)],
+            * GENERATOR.authorPool.length)],
         getRandomIsbn()
     );
-}
-
-function returnBook(books, isbn) {
-    for (let book of books) {
-        if (book.isbn === isbn && book.isCheckedOut) {
-            book.isCheckedOut = true;
-            console.out("Book Returned!");
-            return;
-        }
-    }
-    console.log(`No book with ISBN: ${isbn} was loaned out!`);
 }
 
 function addNewBook(books, getRandomIsbn = false) {
@@ -217,16 +206,30 @@ function addNewBook(books, getRandomIsbn = false) {
     addBook(books, newbook);
 }
 
-function getBookIndexByUID (books, uid) {
-    for(let i = 0; i < books.length; ++i) {
-        if(book[i].uid == uid) return i;
+function getBookIndexByUID(books, uid) {
+    let index = -1;
+    for (let i = 0; i < books.length; ++i) {
+        if (books[i].uid == uid) {
+            index = i;
+            break;
+        }
     }
+    return index;
 }
 
 function removeBookByIndex(books, index) {
-    if(-1 < index && index < books.length) {
+    if (-1 < index && index < books.length) {
         books.splice(index, 1);
     }
+}
+
+function updateBookDataByIndex(books, index, title, author, isbn) {
+    if (validateIsbn(isbn)) {
+        books[index].title = title;
+        books[index].author = author;
+        books[index].isbn = isbn;
+    }
+    else return false;
 }
 
 async function loadData() {
@@ -245,7 +248,7 @@ async function loadData() {
 }
 
 async function saveToJsonBin() {
-    if(!isValid) {
+    if (!isValid) {
         console.log("User tried to save while having err data set!");
         return false; // initial data pull failed.
     }
