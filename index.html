@@ -94,8 +94,8 @@
                 <div class="row">
                     <div class="col-9">
                         <div class="input-group">
-                            <span class="input-group-text" id="add-title-field">Title:</span>
-                            <input type="text" class="form-control" placeholder="Book Title" aria-label="Book Title"
+                            <span class="input-group-text">Title:</span>
+                            <input type="text" id="add-title-field" class="form-control" placeholder="Book Title" aria-label="Book Title"
                                 aria-describedby="add-title-field">
                         </div>
                     </div>
@@ -144,26 +144,27 @@
     <!-- Library Books Listings -->
     <div class="container mt-4">
         <h5>Listings</h5>
-        <div id="row listing-loader">
+        <div id="listing-loader" class="row d-none">
             <div id="loader-div" class="offset-5 col-2 my-5 loader"></div>
         </div>
-        <div id="listing-div" class="d-none">
-            <div class="column" id="book-listing">
-                <ol class="list-group list-group-numbered">
-                    <li class="list-group-item ms-2">Hello World By New Programmer
-                        <button id="delete-btn" class="btn btn-danger" data-uid="1"
-                            style="float:right"><label>Delete</label></button>
-                        <button id="edit-btn" class="btn btn-secondary mx-1" data-uid="1"
-                            style="float:right"><label>Edit</label></button>
-                    </li>
-                    <li class="list-group-item ms-2">Hello World By New Programmer
-                        <button id="delete-btn" class="btn btn-danger" data-uid="2"
-                            style="float:right"><label>Delete</label></button>
-                        <button id="edit-btn" class="btn btn-secondary mx-1" data-uid="2"
-                            style="float:right"><label>Edit</label></button>
-                    </li>
-                </ol>
-            </div>
+        <!-- <div id="listing-div" class="d-none"> -->
+        <div id="listing-div" class="d-block">
+            <!-- <div class="column"> -->
+                <!-- <ol class="list-group list-group-numbered"> -->
+                    <!-- <li class="list-group-item ms-2">Hello World By New Programmer -->
+                        <!-- <button id="delete-btn" class="btn btn-danger" data-uid="1" -->
+                            <!-- style="float:right"><label>Delete</label></button> -->
+                        <!-- <button id="edit-btn" class="btn btn-secondary mx-1" data-uid="1" -->
+                            <!-- style="float:right"><label>Edit</label></button> -->
+                    <!-- </li> -->
+                    <!-- <li class="list-group-item ms-2">Hello World By New Programmer -->
+                        <!-- <button id="delete-btn" class="btn btn-danger" data-uid="2" -->
+                            <!-- style="float:right"><label>Delete</label></button> -->
+                        <!-- <button id="edit-btn" class="btn btn-secondary mx-1" data-uid="2" -->
+                            <!-- style="float:right"><label>Edit</label></button> -->
+                    <!-- </li> -->
+                <!-- </ol> -->
+            <!-- </div> -->
         </div>
     </div>
     <!-- JS -->

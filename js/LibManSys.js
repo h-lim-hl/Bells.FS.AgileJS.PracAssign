@@ -41,7 +41,7 @@ function Book(title, author, isbn) {
 function extractIsbnSymbols(str) {
     const regex = /(\d|[xX]+)/g;
     let capture = str.match(regex);
-    return capture.join('');
+    return (capture == null || capture.length < 1 ) ? "" : capture.join('');
 }
 
 function sumIsbn10Num(isbn, start = 0, end = -1) {
@@ -107,14 +107,14 @@ function sumIsbn13Num(isbn, start = 0, end = -1) {
 
 function validateIsbn(isbn) {
     isbn = extractIsbnSymbols(isbn);
-    console.log(isbn);
+    //console.log(isbn);
     if (isbn.length == 10) {
         return sumIsbn10Num(isbn) % 11 == 0;
     }
     else if (isbn.length == 13) {
         return (sumIsbn13Num(isbn) % 10 == 0);
     }
-    console.log("validateIsbn(): invalid length!")
+    //console.log("validateIsbn(): invalid length!")
     return false;
 }
 
@@ -129,7 +129,7 @@ function getRandomIsbn(is13Long = false) {
 
         newIsbn = FIXEDTHREE + randNum;
 
-        console.log(newIsbn);
+        // console.log(newIsbn);
 
         let sum = 0;
         for (let i = 0; i < newIsbn.length; ++i) {
@@ -140,7 +140,7 @@ function getRandomIsbn(is13Long = false) {
     }
     else {
 
-        console.log(randNum);
+        // console.log(randNum);
 
         let sum = 0;
         for (let start = 0; randNum.length < start; ++start) {
@@ -160,22 +160,22 @@ function validateBook(book) {
 function addBook(books, book) {
     if (validateBook(book)) {
         books.push(book);
-        console.log(`New Book ${book.title} added`);
+        // console.log(`New Book ${book.title} added`);
         return true;
     } else {
-        console.log("Book Data is invalid or ISBN is not unique!");
+        // console.log("Book Data is invalid or ISBN is not unique!");
         return false;
     }
 }
 
 function addBookCustom(books, title, author, isbn) {
     let newBook = {
+        "uid": ++uidCount,
         title: title,
         author: author,
         isbn: isbn,
-        isCheckedOut: false
     };
-    addBook(books, newBook);
+    return addBook(books, newBook);
 }
 
 function addRandomBook(books) {
@@ -217,6 +217,18 @@ function addNewBook(books, getRandomIsbn = false) {
     addBook(books, newbook);
 }
 
+function getBookIndexByUID (books, uid) {
+    for(let i = 0; i < books.length; ++i) {
+        if(book[i].uid == uid) return i;
+    }
+}
+
+function removeBookByIndex(books, index) {
+    if(-1 < index && index < books.length) {
+        books.splice(index, 1);
+    }
+}
+
 async function loadData() {
     let result = false;
 
@@ -227,6 +239,7 @@ async function loadData() {
             result = true;
         })
         .catch(function (err) {
+            console.log(`${err}\naxios.get() failed!`);
         });
     return result;
 }
@@ -247,6 +260,7 @@ async function saveToJsonBin() {
             result = true;
         })
         .catch(function (err) {
+            console.log(`${err}\naxios.put() failed!`);
         });
 
     return result;
