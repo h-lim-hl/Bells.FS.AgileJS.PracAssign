@@ -94,20 +94,19 @@ function renderBooks() {
         liItem.className = "list-group-item ms-2 py-3";
 
         let btn = document.createElement("button");
-        btn.className = "btn btn-danger delete-btn";
+        btn.className = "btn btn-danger delete-btn float-end align-self-center";
         btn.dataset.uid = book.uid;
-        btn.style.cssFloat = "right";
         let btnLabel = document.createElement("label");
         btnLabel.innerHTML = "Delete";
         btn.appendChild(btnLabel);
         liItem.appendChild(btn);
 
         btn = document.createElement("button");
-        btn.className = "btn btn-secondary mx-1 edit-btn";
+        btn.className = "btn btn-secondary mx-1 edit-btn float-end";
         btn.dataset.uid = book.uid;
-        btn.style.cssFloat = "right";
         btnLabel = document.createElement("label");
         btnLabel.innerHTML = "Edit";
+        
         btn.appendChild(btnLabel);
         liItem.appendChild(btn);
 
