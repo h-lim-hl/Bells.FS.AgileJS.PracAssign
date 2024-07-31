@@ -17,11 +17,21 @@ const GENERATOR = {
 
 const JSON_BIN_ROOT = "https://api.jsonbin.io/v3"
 const JSON_BIN_ID = "66a22c98ad19ca34f88c95a7";
-const JSON_BIN_BIN = JSON_BIN_ROOT + /b/ + JSON_BIN_ID;
+const JSON_BIN_API_KEY =
+    "$2a$10$KY3KF5oUR0VTW3SHvqqxcuMWersO91SeoKsUBVCIMlZeZM87ItIT6";
 
 let books = [];
 let uidCount = -1;
 let isValid = false; // if initial load is successful
+
+
+const flmsConfig = axios.create({
+    baseURL: JSON_BIN_ROOT,
+    headers: {
+        "Content-Type": "application/json",
+        "X-Master-Key": JSON_BIN_API_KEY
+    }
+});
 
 function Book(title, author, isbn) {
     return {
@@ -259,9 +269,10 @@ async function saveToJsonBin() {
         "uidCount": uidCount,
         "books": books
     };
+
     console.log(JSON.stringify(json));
-    
-    await axios.put(JSON_BIN_BIN, JSON.stringify(json))
+
+    await axios.put(/b/ + JSON_BIN_ID, JSON.stringify(json), flmsConfig)
         .then(function (reponse) {
             result = true;
         })

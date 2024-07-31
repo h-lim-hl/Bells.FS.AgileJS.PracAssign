@@ -1,20 +1,13 @@
 const SEARCH_DIV = document.querySelector("#search-div");
 const ADD_DIV = document.querySelector("#add-div");
 const EDIT_DIV = document.querySelector("#edit-div");
-const NAV_ELEMENTS = [SEARCH_DIV, ADD_DIV, EDIT_DIV];
-
 const LISTING_DIV = document.querySelector("#listing-div");
-const LISTING_LOADER_DIV = document.querySelector("#listing-loader");
-const BOOK_DISPLAY_ELEMENTS = [LISTING_DIV, LISTING_LOADER_DIV];
 
 const LOG_DISPLAY = document.querySelector("console-out");
 const BS_DISPLAY_CLASS = "d-block";
 const BS_HIDE_CLASS = "d-none";
 
 const SEARCH_BOOK_BTN = document.querySelector("#search-btn");
-
-const UPDATE_BOOK_BTN = document.querySelector("#edit-btn");
-let update_action_space = { "bookIndex": -1 };
 
 const ADD_TITLE_FIELD = document.querySelector("#add-title-field");
 const ADD_AUTHOR_FIELD = document.querySelector("#add-author-field");
@@ -63,25 +56,6 @@ const HELPER = {
     }
 }
 
-function divShowOnly(divElemArr, element) {
-    for(let elem of divElemArr) {
-        if(element === elem) {
-            elem.classList.add(BS_DISPLAY_CLASS);
-            elem.classList.remove(BS_HIDE_CLASS);
-        } else {
-            elem.classList.remove(BS_DISPLAY_CLASS);
-            elem.classList.add(BS_HIDE_CLASS);
-        }
-    }
-}
-
-function divHideAll(divELemArr) {
-    for(let elem of divELemArr) {
-        elem.classList.remove(BS_DISPLAY_CLASS);
-            elem.classList.add(BS_HIDE_CLASS);
-    }
-}
-
 function renderBooks() {
     if (0 < LISTING_DIV.children.length)
         LISTING_DIV.removeChild(LISTING_DIV.children[0]);
@@ -94,19 +68,20 @@ function renderBooks() {
         liItem.className = "list-group-item ms-2 py-3";
 
         let btn = document.createElement("button");
-        btn.className = "btn btn-danger delete-btn float-end align-self-center";
+        btn.className = "btn btn-danger delete-btn";
         btn.dataset.uid = book.uid;
+        btn.style.cssFloat = "right";
         let btnLabel = document.createElement("label");
         btnLabel.innerHTML = "Delete";
         btn.appendChild(btnLabel);
         liItem.appendChild(btn);
 
         btn = document.createElement("button");
-        btn.className = "btn btn-secondary mx-1 edit-btn float-end";
+        btn.className = "btn btn-secondary mx-1 edit-btn";
         btn.dataset.uid = book.uid;
+        btn.style.cssFloat = "right";
         btnLabel = document.createElement("label");
         btnLabel.innerHTML = "Edit";
-        
         btn.appendChild(btnLabel);
         liItem.appendChild(btn);
 
@@ -120,7 +95,12 @@ function renderBooks() {
     // EDIT BUTTON
     for (let btn of document.querySelectorAll(".edit-btn")) {
         btn.addEventListener("click", function () {
-            divShowOnly(NAV_ELEMENTS, EDIT_DIV);
+            ADD_DIV.classList.remove(BS_DISPLAY_CLASS);
+            ADD_DIV.classList.add(BS_HIDE_CLASS);
+            SEARCH_DIV.classList.remove(BS_DISPLAY_CLASS);
+            SEARCH_DIV.classList.add(BS_HIDE_CLASS);
+            EDIT_DIV.classList.remove(BS_HIDE_CLASS);
+            EDIT_DIV.classList.add(BS_DISPLAY_CLASS);
             
             let uid = btn.dataset.uid;
             let index = getBookIndexByUID(books, uid);
@@ -129,75 +109,50 @@ function renderBooks() {
                 EDIT_TITLE_FIELD.value = book.title;
                 EDIT_AUTHOR_FIELD.value = book.author;
                 EDIT_ISBN_FIELD.value = book.isbn;
-                update_action_space.bookIndex = index;
             } else { 
                 HELPER.htmlLog(`Book UID:${uid} was not found!`, ENUM_LOG_TYPE.err);
             }
         });
     }
-
-    // DELETE BUTTON
-    for(let btn of document.querySelectorAll(".delete-btn")) {
-        btn.addEventListener("click", function () {
-            let uid = btn.dataset.uid;
-            let index = getBookIndexByUID(books, uid);
-            let tempBook = books[index]; 
-            if(
-                confirm(`Delete ${books[index].title} By ${books[index].author}?`)
-            ){
-                removeBookByIndex(books, index);
-                renderBooks();
-                HELPER.htmlLog(`Book ${tempBook.title} removed!`, ENUM_LOG_TYPE.warn);
-            }
-        });
-    };
 }
 
-UPDATE_BOOK_BTN.addEventListener("click", function () {
-    let bookIndex = update_action_space.bookIndex;
-
-    if(bookIndex < 0 && books.length <= bookIndex) {
-        HELPER.htmlLog("Unable to Update Book!",ENUM_LOG_TYPE.err);
-        EDIT_TITLE_FIELD.value = EDIT_AUTHOR_FIELD.value =
-        EDIT_ISBN_FIELD.value = "";
-        return;
-    }
-    if(!validateIsbn(EDIT_ISBN_FIELD.value)) {
-        HELPER.htmlLog("Book ISBN is invalid!",ENUM_LOG_TYPE.err);
-        return;
-    } 
-    books[bookIndex].title = EDIT_TITLE_FIELD.value;
-    books[bookIndex].author = EDIT_AUTHOR_FIELD.value;
-    books[bookIndex].isbn = EDIT_ISBN_FIELD.value;
-    EDIT_TITLE_FIELD.value = EDIT_AUTHOR_FIELD.value = EDIT_ISBN_FIELD.value = ""; 
-    HELPER.htmlLog(`Book "${books[bookIndex].title}" Updated!`,
-         ENUM_LOG_TYPE.verbose);
-    divHideAll(NAV_ELEMENTS);
-    renderBooks();
-});
-
 document.querySelector("#home-nav").addEventListener("click", function () {
-    divHideAll(NAV_ELEMENTS);
+    ADD_DIV.classList.remove(BS_DISPLAY_CLASS);
+    ADD_DIV.classList.add(BS_HIDE_CLASS);
+    SEARCH_DIV.classList.remove(BS_DISPLAY_CLASS);
+    SEARCH_DIV.classList.add(BS_HIDE_CLASS);
+    EDIT_DIV.classList.add(BS_HIDE_CLASS);
+    EDIT_DIV.classList.remove(BS_DISPLAY_CLASS);
 });
 
 /* To do later after all basic features complete
 document.querySelector("#search-nav").addEventListener("click", function () {
-    divShowOnly(NAV_ELEMENTS, SEARCH_DIV);
+    ADD_DIV.classList.remove(BS_DISPLAY_CLASS);
+    ADD_DIV.classList.add(BS_HIDE_CLASS);
+    SEARCH_DIV.classList.remove(BS_HIDE_CLASS);
+    SEARCH_DIV.classList.add(BS_DISPLAY_CLASS);
+    EDIT_DIV.classList.add(BS_HIDE_CLASS);
+    EDIT_DIV.classList.remove(BS_DISPLAY_CLASS);
 });
 */
 
 document.querySelector("#add-nav").addEventListener("click", function () {
-    divShowOnly(NAV_ELEMENTS, ADD_DIV);
+    SEARCH_DIV.classList.remove(BS_DISPLAY_CLASS);
+    SEARCH_DIV.classList.add(BS_HIDE_CLASS);
+    ADD_DIV.classList.remove(BS_HIDE_CLASS);
+    ADD_DIV.classList.add(BS_DISPLAY_CLASS);
+    EDIT_DIV.classList.add(BS_HIDE_CLASS);
+    EDIT_DIV.classList.remove(BS_DISPLAY_CLASS);
 });
 
 document.querySelector("#save-nav").addEventListener("click", async function () {
     if(!IS_LIVE) {
-        HELPER.htmlLog("Save Button Pressed!", ENUM_LOG_TYPE.log);
+        HELPER.htmlLog("Save Button Pressed!", helper.logType.log);
         return;
     }
     if (await saveToJsonBin())
-        HELPER.htmlLog("Save Successful!", ENUM_LOG_TYPE.verbose);
-    else HELPER.htmlLog("Save Failed!", ENUM_LOG_TYPE.err);
+        HELPER.htmlLog("Save Successful!", helper.logType.verbose);
+    else HELPER.htmlLog("Save Failed!", helper.logType.err);
 });
 
 document.querySelector("#log-clear-btn").addEventListener("click", function () {
@@ -238,29 +193,16 @@ document.querySelector("#add-rnd-btn").addEventListener("click", function () {
 
 document.addEventListener("DOMContentLoaded", async function () {
     if(IS_LIVE) {
-        divShowOnly(BOOK_DISPLAY_ELEMENTS, LISTING_LOADER_DIV);
-        
+        document.querySelector("#listing-loader").classList.remove(BS_HIDE_CLASS);
+        document.querySelector("#listing-loader").classList.add(BS_DISPLAY_CLASS);
+
         await loadData();
-        isValid = true;
-
-        divShowOnly(BOOK_DISPLAY_ELEMENTS, LISTING_DIV);
-
-        HELPER.htmlLog("Book List Loaded!", ENUM_LOG_TYPE.log);
-
-    } else {
-        divShowOnly(BOOK_DISPLAY_ELEMENTS, LISTING_LOADER_DIV);
-
-        setTimeout(() => {
-            divShowOnly(BOOK_DISPLAY_ELEMENTS, LISTING_DIV);
-
-            for(let _ = 0; _ < 3; ++_) addRandomBook(books);
-            console.log(books);
-            renderBooks();
-
-            HELPER.htmlLog("Book List Loaded - offline!", ENUM_LOG_TYPE.log);
-        }, 2000);
     }
-
+    document.querySelector("#listing-loader").classList.remove(BS_DISPLAY_CLASS);
+    document.querySelector("#listing-loader").classList.add(BS_HIDE_CLASS);
 });
 
 
+for(let _ = 0; _ < 3; ++_) addRandomBook(books);
+console.log(books);
+renderBooks();
