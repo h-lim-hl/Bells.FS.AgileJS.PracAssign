@@ -218,7 +218,8 @@ function getBookIndexByUID(books, uid) {
 }
 
 function removeBookByIndex(books, index) {
-    if (-1 < index && index < books.length) {
+    console.log(`remove index ${index} from ${books}`);
+    if ((-1 < index) && index < books.length) {
         books.splice(index, 1);
     }
 }
@@ -237,8 +238,9 @@ async function loadData() {
 
     await axios.get(JSON_BIN_BIN + "/latest")
         .then(function (response) {
-            uidCount = parseInt(response.record.uidCount);
-            books = response.record.books;
+            console.log(response.data.record);
+            uidCount = parseInt(response.data.record.uidCount);
+            books = response.data.record.books;
             result = true;
         })
         .catch(function (err) {
@@ -257,8 +259,9 @@ async function saveToJsonBin() {
         "uidCount": uidCount,
         "books": books
     };
-
-    await axios.put(JSON_BIN_BIN, json.toString())
+    console.log(JSON.stringify(json));
+    
+    await axios.put(JSON_BIN_BIN, JSON.stringify(json))
         .then(function (reponse) {
             result = true;
         })
