@@ -17,21 +17,12 @@ const GENERATOR = {
 
 const JSON_BIN_ROOT = "https://api.jsonbin.io/v3"
 const JSON_BIN_ID = "66a22c98ad19ca34f88c95a7";
-const JSON_BIN_API_KEY =
-    "$2a$10$KY3KF5oUR0VTW3SHvqqxcuMWersO91SeoKsUBVCIMlZeZM87ItIT6";
+const JSON_BIN_BIN = `${JSON_BIN_ROOT}/b/${JSON_BIN_ID}`;
+
 
 let books = [];
 let uidCount = -1;
 let isValid = false; // if initial load is successful
-
-
-const flmsConfig = axios.create({
-    baseURL: JSON_BIN_ROOT,
-    headers: {
-        "Content-Type": "application/json",
-        "X-Master-Key": JSON_BIN_API_KEY
-    }
-});
 
 function Book(title, author, isbn) {
     return {
@@ -272,7 +263,7 @@ async function saveToJsonBin() {
 
     console.log(JSON.stringify(json));
 
-    await axios.put(/b/ + JSON_BIN_ID, JSON.stringify(json), flmsConfig)
+    await axios.put(JSON_BIN_BIN, json)
         .then(function (reponse) {
             result = true;
         })
@@ -282,20 +273,3 @@ async function saveToJsonBin() {
 
     return result;
 }
-//App();
-
-//console.log(validateIsbn("978-1-408-85565-2"));
-//console.log(validateIsbn("0-14242417X"));
-
-// let isbn = getRandomIsbn();
-// console.log(isbn);
-// console.log(validateIsbn(isbn));
-//let testBooks = [];
-//for(let i =  0; i < 10; ++i) addRandomBook(testBooks);
-// console.log(testBooks);
-//showAllBook(testBooks);
-
-// let test = Date.now();
-// console.log(test);
-
-//console.log(new Book("Hello World", "Blue Banana", "1234567890"));
