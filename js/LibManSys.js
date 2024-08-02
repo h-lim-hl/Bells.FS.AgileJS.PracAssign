@@ -22,7 +22,6 @@ const JSON_BIN_BIN = `${JSON_BIN_ROOT}/b/${JSON_BIN_ID}`;
 
 let books = [];
 let uidCount = -1;
-let isValid = false; // if initial load is successful
 
 function Book(title, author, isbn) {
     return {
@@ -251,10 +250,6 @@ async function loadData() {
 }
 
 async function saveToJsonBin() {
-    if (!isValid) {
-        console.log("User tried to save while having err data set!");
-        return false; // initial data pull failed.
-    }
     let result = false;
     let json = {
         "uidCount": uidCount,
@@ -262,9 +257,10 @@ async function saveToJsonBin() {
     };
 
     console.log(JSON.stringify(json));
-
+    
     await axios.put(JSON_BIN_BIN, json)
         .then(function (reponse) {
+            console.log(reponse);
             result = true;
         })
         .catch(function (err) {

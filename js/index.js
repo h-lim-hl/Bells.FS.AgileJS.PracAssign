@@ -26,7 +26,7 @@ const EDIT_ISBN_FIELD = document.querySelector("#edit-isbn-field");
 
 const LOG_ELEM = document.querySelector("#console-out");
 
-const IS_LIVE = false;
+const IS_LIVE = true;
 
 const ENUM_LOG_TYPE = {
     "vryVerbose": 1,
@@ -57,8 +57,11 @@ const HELPER = {
         };
         newLogEntry.innerHTML = string;
         newLogEntry.style.color = color;
-        if (LOG_ELEM.children.length == 0)
-            LOG_ELEM.appendChild(document.createElement('div'));
+
+        while (0 < LOG_ELEM.children.length)
+            LOG_ELEM.removeChild(LOG_ELEM.children[0]);
+
+        LOG_ELEM.appendChild(document.createElement('div'));
         LOG_ELEM.children[0].appendChild(newLogEntry);
     }
 }
@@ -86,36 +89,41 @@ function renderBooks() {
     if (0 < LISTING_DIV.children.length)
         LISTING_DIV.removeChild(LISTING_DIV.children[0]);
 
-    let oList = document.createElement("ol");
-    oList.className = "list-group-item list-group-numbered"
+    let mainDiv = document.createElement("div");
+    mainDiv.className = "column";
+    let bookCount = 0;
     for (let book of books) {
-        let liItem = document.createElement("li");
-        liItem.innerHTML = `${book.title} By ${book.author}`;
-        liItem.className = "list-group-item ms-2 py-3";
+        let itemDiv = document.createElement("div");
+        itemDiv.className = "row align-items-center"
+        
+        let titleDiv = document.createElement("div");
+        titleDiv.className = "col-6 ms-2 py-3";
+        titleDiv.innerHTML = `${++bookCount}. ${book.title} By ${book.author}`;
+        itemDiv.appendChild(titleDiv);
+
+        let btnDiv = document.createElement("div");
+        btnDiv.className = "col-4"
 
         let btn = document.createElement("button");
-        btn.className = "btn btn-danger delete-btn float-end align-self-center";
+        btn.className = "btn btn-secondary mx-1 edit-btn";
         btn.dataset.uid = book.uid;
         let btnLabel = document.createElement("label");
-        btnLabel.innerHTML = "Delete";
+        btnLabel.innerHTML = "Edit";
         btn.appendChild(btnLabel);
-        liItem.appendChild(btn);
-
+        btnDiv.appendChild(btn);
+        
         btn = document.createElement("button");
-        btn.className = "btn btn-secondary mx-1 edit-btn float-end";
+        btn.className = "btn btn-danger delete-btn";
         btn.dataset.uid = book.uid;
         btnLabel = document.createElement("label");
-        btnLabel.innerHTML = "Edit";
-        
+        btnLabel.innerHTML = "Delete";
         btn.appendChild(btnLabel);
-        liItem.appendChild(btn);
-
-        oList.appendChild(liItem);
+        btnDiv.appendChild(btn);
+        
+        itemDiv.appendChild(btnDiv);
+        mainDiv.appendChild(itemDiv);
     }
-    let listWrapper = document.createElement("div");
-    listWrapper.className = "column";
-    listWrapper.appendChild(oList);
-    LISTING_DIV.appendChild(listWrapper);
+    LISTING_DIV.appendChild(mainDiv);
 
     // EDIT BUTTON
     for (let btn of document.querySelectorAll(".edit-btn")) {
@@ -191,10 +199,6 @@ document.querySelector("#add-nav").addEventListener("click", function () {
 });
 
 document.querySelector("#save-nav").addEventListener("click", async function () {
-    if(!IS_LIVE) {
-        HELPER.htmlLog("Save Button Pressed!", ENUM_LOG_TYPE.log);
-        return;
-    }
     if (await saveToJsonBin())
         HELPER.htmlLog("Save Successful!", ENUM_LOG_TYPE.verbose);
     else HELPER.htmlLog("Save Failed!", ENUM_LOG_TYPE.err);
@@ -241,8 +245,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         divShowOnly(BOOK_DISPLAY_ELEMENTS, LISTING_LOADER_DIV);
         
         await loadData();
-        isValid = true;
-
+        renderBooks();
         divShowOnly(BOOK_DISPLAY_ELEMENTS, LISTING_DIV);
 
         HELPER.htmlLog("Book List Loaded!", ENUM_LOG_TYPE.log);
@@ -260,11 +263,12 @@ document.addEventListener("DOMContentLoaded", async function () {
             HELPER.htmlLog("Book List Loaded - offline!", ENUM_LOG_TYPE.log);
         }, 2000);
     }
-    document.querySelector("#listing-loader").classList.remove(BS_DISPLAY_CLASS);
-    document.querySelector("#listing-loader").classList.add(BS_HIDE_CLASS);
+
 });
 
 
-for(let _ = 0; _ < 3; ++_) addRandomBook(books);
-console.log(books);
-renderBooks();
+// ################################
+document.querySelector("#Debug").addEventListener("click", function() {
+    console.log(`uidCount: ${uidCount}`);
+    console.log(`books: ${books}`);
+});
