@@ -265,10 +265,3 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
 });
-
-
-// ################################
-document.querySelector("#Debug").addEventListener("click", function() {
-    console.log(`uidCount: ${uidCount}`);
-    console.log(`books: ${books}`);
-});
